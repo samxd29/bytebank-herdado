@@ -15,22 +15,20 @@ public abstract class Conta {
     //No método podemos ter também o abstract, ele só não vai ter implementação;
     public abstract double deposita(double valor);
 
-    public boolean saca(double valor) {
-        if(this.saldo >= valor) {
-            this.saldo -= valor;
-            return true;
-        } else {
-            return false;
+    // Eu criei uma classe de exceção e mudei a classe saca;
+    //Se o saldo for menor do que o valor a sacar vou fazer o tratamento usando o Throw;
+    public void saca(double valor) throws SacaException {
+        if(this.saldo < valor) {
+            throw new SacaException("Saldo: " + this.saldo + " ,  Valor a sacar: " + valor);
         }
+        this.saldo -= valor;
     }
+    // Mudei o método transfere, coloquei como void e se o saca funcionar vai depositar o valor;
+    //Fiz alteração na classe mãe e consequentemente terei que fazer alteração nas classes filhas;
+    public void transfere(double valor, Conta destino) throws SacaException {
+        this.saca(valor);
+        destino.deposita(valor);
 
-    public boolean transfere(double valor, Conta destino) {
-        if(this.saca(valor)) {
-            destino.deposita(valor);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public double getSaldo(){
